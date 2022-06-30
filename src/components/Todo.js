@@ -1,11 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
-
+import SingleTask from './SingleTask';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import auth from '../firebase.init';
+import Lottie from 'react-lottie';
+import * as animationData from './jsonLotti/writing-assistant.json'
+import Loading from './Loading';
 
 
 const Todo = () => {
-
+    const { register, formState: { errors }, handleSubmit, reset } = useForm();
     const { data, isLoading, error, refetch } = useQuery('repoData', () =>
         fetch(`http://localhost:5000/tasks`, {
             method: 'GET',
@@ -16,58 +23,133 @@ const Todo = () => {
             res.json()
         )
     )
-    console.log(data);
+    const [user] = useAuthState(auth);
 
+    const addTask = (data) => {
+        const task = data.task;
+        const name = user.displayName;
+        const email = user.email;
+
+        const taskData = { task, email, name }
+        console.log(taskData);
+
+        if (taskData) {
+            fetch('http://localhost:5000/task', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(taskData)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    toast.success('SuccessFully added your Task');
+                    refetch()
+
+                })
+        }
+        else {
+            toast.error("Please insert a valid string")
+        }
+
+        reset();
+
+    }
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        }
+    };
+
+    if (isLoading) {
+        return <Loading></Loading>
+    }
+    console.log(error);
     return (
-        <div className='text-center my-5'>
+        <div className='text-center  bg-neutral  py-5'>
 
             <div class="tooltip hover:tooltip-open my-5" data-tip="please login to add some task!!">
                 <Link className='btn btn-primary' to="/addtask">Add Task +</Link>
             </div>
             <div>
-                todo task show here.........
 
-                <div className='grid grid-cols-3 gap-4'>
 
-                    <div class="card  bg-primary text-primary-content">
-                        <div class="card-body">
-                            <h2 class="card-title">My today task</h2>
-                            <p>If a dog chews shoes whose shoes does he choose?</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn">Buy Now</button>
-                            </div>
+                <div className='mx-3 px-7'>
+                    <div class="card  text-dark">
+                        <h2 className='text-2xl text-white'>My today list</h2>
+
+                        <div class="overflow-x-auto">
+                            <table class="table w-full">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Task Deskription</th>
+                                        <th>edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        data?.map(taskD => <SingleTask key={taskD._id} taskD={taskD}>
+                                        </SingleTask>
+                                        )
+                                    }
+                                </tbody>
+                            </table>
                         </div>
+
+                        <div className='content-center text-center my-5'>
+                            <form onSubmit={handleSubmit(addTask)} >
+                                <div className="form-control lg:w-full">
+                                    <input
+                                        {...register("task", {
+                                            required: {
+                                                value: true,
+                                                message: 'Add task'
+                                            }
+                                        })}
+                                        type="text" placeholder="Add a task"
+                                        className="input input-secondary w-full h-[60px] text-2xl" />
+                                    <label className="label">
+                                        {errors.review?.type === 'required' && <span className="label-text-alt text-red-500">{errors?.review?.message}</span>}
+                                    </label>
+
+                                </div>
+                                <input className='btn lg:w-1/2 btn-secondary text-white' type="submit" value='Add task' />
+                            </form>
+                        </div>
+
                     </div>
-                    <div class="card  bg-primary text-primary-content">
-                        <div class="card-body">
-                            <h2 class="card-title">My today task</h2>
-                            <p>If a dog chews shoes whose shoes does he choose?</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn">Buy Now</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card  bg-primary text-primary-content">
-                        <div class="card-body">
-                            <h2 class="card-title">My today task</h2>
-                            <p>If a dog chews shoes whose shoes does he choose?</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn">Buy Now</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card  bg-primary text-primary-content">
-                        <div class="card-body">
-                            <h2 class="card-title">My today task</h2>
-                            <p>If a dog chews shoes whose shoes does he choose?</p>
-                            <div class="card-actions justify-end">
-                                <button class="btn">Buy Now</button>
-                            </div>
-                        </div>
+                    <div className=''>
+                        <Lottie options={defaultOptions}
+                            height={500}
+                            width={500}
+                        />
                     </div>
                 </div>
 
+
+
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
     );
 };

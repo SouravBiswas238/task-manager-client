@@ -8,6 +8,8 @@ import RequreAuth from './components/RequreAuth';
 import AddTask from './components/AddTask';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import NotFound from './components/NotFound';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
 
       <Header></Header>
       <Routes>
+        <Route path="/" element={<Todo />}></Route>
         <Route path="/todo" element={<Todo />}></Route>
 
         <Route path='/addtask' element={
@@ -25,7 +28,11 @@ function App() {
 
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
+
+        <Route path="*" element={<NotFound />}></Route>
+
       </Routes>
+      <Footer></Footer>
       <ToastContainer />
     </div>
 
