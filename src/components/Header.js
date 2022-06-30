@@ -32,7 +32,7 @@ const Header = () => {
                     </div>
                 </div>
                 <Link className='p-2 mx-2 hover:bg-slate-400 rounded' to='/todo'>To-Do</Link>
-                <Link className='p-2 mx-2 hover:bg-slate-400 rounded' to='/complete'>Completed</Link>
+                <Link className='p-2 mx-2 hover:bg-slate-400 rounded' to='/complete'>Complete</Link>
                 <Link className='p-2 mx-2 hover:bg-slate-400 rounded' to='/favourite'>Favourite</Link>
                 <Link className='p-2 mx-2 hover:bg-slate-400 rounded' to='/calender'> Calendar</Link>
             </div>

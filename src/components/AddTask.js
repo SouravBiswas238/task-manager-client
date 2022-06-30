@@ -3,8 +3,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import auth from '../firebase.init';
-import Lottie from 'react-lottie';
-import * as animationData from './jsonLotti/writing-assistant.json'
+import WritingLotti from './jsonLotti/WritingLotti';
+
 
 const AddTask = () => {
 
@@ -40,14 +40,7 @@ const AddTask = () => {
         reset();
 
     }
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice'
-        }
-    };
+
 
     return (
         <div className='m-5'>
@@ -77,10 +70,7 @@ const AddTask = () => {
                 </div>
 
                 <div>
-                    <Lottie options={defaultOptions}
-                        height={400}
-                        width={400}
-                    />
+                    <WritingLotti></WritingLotti>
                 </div>
             </div>
 
