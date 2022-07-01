@@ -8,20 +8,19 @@ import { toast } from 'react-toastify';
 import auth from '../firebase.init';
 import Loading from './Loading';
 import EditModal from './EditModal';
-import Complited from './Complited';
 import WritingLotti from './jsonLotti/WritingLotti';
 
 
 const Todo = () => {
     const [editData, setEditData] = useState({});
-    const [checkboxOpen, setCheckboxOpen] = useState({});
     const [show, setShow] = useState(true);
+    const [user] = useAuthState(auth);
 
 
 
     const { register, formState: { errors }, handleSubmit, reset } = useForm();
     const { data, isLoading, error, refetch } = useQuery('repoData', () =>
-        fetch(`http://localhost:5000/tasks`, {
+        fetch(`https://shielded-mesa-63878.herokuapp.com/tasks`, {
             method: 'GET',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -30,7 +29,6 @@ const Todo = () => {
             res.json()
         )
     )
-    const [user] = useAuthState(auth);
 
     const addTask = (data) => {
         const task = data?.task;
@@ -40,7 +38,7 @@ const Todo = () => {
         const taskData = { task, email, name }
 
         if (taskData) {
-            fetch('http://localhost:5000/task', {
+            fetch('https://shielded-mesa-63878.herokuapp.com/task', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -61,7 +59,7 @@ const Todo = () => {
 
     }
     const handelTaskEdit = (id) => {
-        fetch(`http://localhost:5000/tasks/${id}`, {
+        fetch(`https://shielded-mesa-63878.herokuapp.com/tasks/${id}`, {
             method: 'GET',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -75,24 +73,23 @@ const Todo = () => {
         setShow(true)
     }
 
-
-
-    if (isLoading) {
+    if (isLoading || error) {
+        refetch();
         return <Loading></Loading>
     }
     return (
         <div className='text-center  bg-neutral  py-5'>
 
-            <div class="tooltip hover:tooltip-open my-5" data-tip="please login to add some task!!">
+            <div className="tooltip hover:tooltip-open my-5" data-tip="please login to add some task!!">
                 <Link className='btn btn-primary' to="/addtask">Add Task +</Link>
             </div>
 
 
             <div className='mx-3 lg:px-7'>
-                <div class="card  text-dark">
+                <div className="card  text-dark">
                     <h2 className='text-2xl m-2 text-white'>My today list</h2>
-                    <div class="overflow-x-auto">
-                        <table class="table w-full">
+                    <div className="overflow-x-auto">
+                        <table className="table w-full">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -103,7 +100,7 @@ const Todo = () => {
                             </thead>
                             <tbody>
                                 {
-                                    data?.map(taskD => <SingleTask key={taskD._id} handelTaskEdit={handelTaskEdit} taskD={taskD}>
+                                    data?.map(taskD => <SingleTask key={taskD._id} refetch={refetch} handelTaskEdit={handelTaskEdit} taskD={taskD}>
                                     </SingleTask>
                                     )
                                 }

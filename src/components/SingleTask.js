@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Loading from './Loading';
@@ -7,12 +6,12 @@ import { toast } from 'react-toastify';
 
 
 
-const SingleTask = ({ taskD, handelTaskEdit }) => {
+const SingleTask = ({ taskD, handelTaskEdit, refetch }) => {
 
     const [deleteData, setDeleteData] = useState({});
 
     const handelTaskDelete = (id) => {
-        fetch(`http://localhost:5000/tasks/${id}`, {
+        fetch(`https://shielded-mesa-63878.herokuapp.com/tasks/${id}`, {
             method: 'DELETE',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -26,7 +25,7 @@ const SingleTask = ({ taskD, handelTaskEdit }) => {
             });
     }
     const handelCompleted = (id) => {
-        fetch(`http://localhost:5000/tasks-complete/${id}`, {
+        fetch(`https://shielded-mesa-63878.herokuapp.com/tasks-complete/${id}`, {
             method: 'DELETE',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -42,11 +41,12 @@ const SingleTask = ({ taskD, handelTaskEdit }) => {
     }
 
     if (deleteData.deletedCount === 1) {
+        refetch()
         return <Loading></Loading>
     }
     return (
 
-        <tr class="hover">
+        <tr className="hover">
             <th><button onClick={() => handelCompleted(taskD._id)} >
                 <input className='mx-3 px-2 checkbox checkbox-secondary font-xl' type="checkbox"
                 />

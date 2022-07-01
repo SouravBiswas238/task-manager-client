@@ -1,9 +1,11 @@
 import React from 'react';
+import LoadingLotti from './jsonLotti/LoadingLotti';
 
 const Loading = () => {
     return (
-        <div className='h-2'>
-            <progress class="progress w-100"></progress>
+        <div>
+            {/* <progress className="progress w-100"></progress> */}
+            <LoadingLotti></LoadingLotti>
         </div>
     );
 };

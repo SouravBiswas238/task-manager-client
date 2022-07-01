@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import React from 'react';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 
@@ -7,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 
 const EditModal = ({ editData, refetch, setShow }) => {
-    const { name, email, _id, task } = editData;
+    const { _id, task } = editData;
     const { register, formState: { errors }, handleSubmit: handleEditSubmit, reset } = useForm();
 
     const editTask = (editedTask) => {
@@ -16,7 +15,7 @@ const EditModal = ({ editData, refetch, setShow }) => {
         console.log(editData);
 
         if (editedTask) {
-            fetch(`http://localhost:5000/tasks/${id}`, {
+            fetch(`https://shielded-mesa-63878.herokuapp.com/tasks/${id}`, {
                 method: 'PUT',
                 headers: {
                     'content-type': 'application/json'
@@ -39,11 +38,11 @@ const EditModal = ({ editData, refetch, setShow }) => {
 
     return (
         <div>
-            <input type="checkbox" id="edit-modal" class="modal-toggle" />
-            <div class="modal">
-                <div class="modal-box w-11/12 max-w-3xl">
-                    <h3 class="font-bold text-lg"> Edit your task here</h3>
-                    <label for="edit-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+            <input type="checkbox" id="edit-modal" className="modal-toggle" />
+            <div className="modal">
+                <div className="modal-box w-11/12 max-w-3xl">
+                    <h3 className="font-bold text-lg"> Edit your task here</h3>
+                    <label for="edit-modal" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
 
                     <form onSubmit={handleEditSubmit(editTask)} >
                         <div className="form-control lg:w-full">
