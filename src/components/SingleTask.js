@@ -6,21 +6,13 @@ import Loading from './Loading';
 
 
 
-const SingleTask = ({ taskD, handelTaskEdit }) => {
+const SingleTask = ({ taskD, handelTaskEdit, status }) => {
 
     const [deleteData, setDeleteData] = useState({});
-    const [checkboxOpen, setCheckboxOpen] = useState({});
-
-
-
-    const status = (event) => {
-        setCheckboxOpen(event);
-
-    }
 
 
     const handelTaskDelete = (id) => {
-        fetch(`http://localhost:5000/tasks/${id}`, {
+        fetch(`https://shielded-mesa-63878.herokuapp.com/tasks/${id}`, {
             method: 'DELETE',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`

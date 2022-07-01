@@ -15,7 +15,7 @@ const EditModal = ({ editData, refetch }) => {
     const editTask = (editedTask) => {
         const id = _id;
         if (editedTask) {
-            fetch(`http://localhost:5000/tasks/${id}`, {
+            fetch(`https://shielded-mesa-63878.herokuapp.com/tasks/${id}`, {
                 method: 'PUT',
                 headers: {
                     'content-type': 'application/json'

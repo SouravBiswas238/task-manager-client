@@ -8,15 +8,19 @@ import { toast } from 'react-toastify';
 import auth from '../firebase.init';
 import Loading from './Loading';
 import EditModal from './EditModal';
+import Complited from './Complited';
 import WritingLotti from './jsonLotti/WritingLotti';
 
 
 const Todo = () => {
     const [editData, setEditData] = useState({});
+    const [checkboxOpen, setCheckboxOpen] = useState({});
+    const a = ["Banana",];
+
 
     const { register, formState: { errors }, handleSubmit, reset } = useForm();
     const { data, isLoading, error, refetch } = useQuery('repoData', () =>
-        fetch(`http://localhost:5000/tasks`, {
+        fetch(`https://shielded-mesa-63878.herokuapp.com/tasks`, {
             method: 'GET',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -35,7 +39,7 @@ const Todo = () => {
         const taskData = { task, email, name }
 
         if (taskData) {
-            fetch('http://localhost:5000/task', {
+            fetch('https://shielded-mesa-63878.herokuapp.com/task', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -55,9 +59,8 @@ const Todo = () => {
         reset();
 
     }
-
     const handelTaskEdit = (id) => {
-        fetch(`http://localhost:5000/tasks/${id}`, {
+        fetch(`https://shielded-mesa-63878.herokuapp.com/tasks/${id}`, {
             method: 'GET',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -67,6 +70,12 @@ const Todo = () => {
             .then(data => {
                 setEditData(data);
             });
+    }
+
+
+    const status = (event) => {
+        setCheckboxOpen(event);
+
     }
 
     if (isLoading) {
@@ -95,7 +104,7 @@ const Todo = () => {
                             </thead>
                             <tbody>
                                 {
-                                    data?.map(taskD => <SingleTask key={taskD._id} handelTaskEdit={handelTaskEdit} taskD={taskD}>
+                                    data?.map(taskD => <SingleTask key={taskD._id} status={status} handelTaskEdit={handelTaskEdit} taskD={taskD}>
                                     </SingleTask>
                                     )
                                 }
@@ -130,7 +139,9 @@ const Todo = () => {
 
                 </div>
 
-
+                {
+                    <Complited checkboxOpen={checkboxOpen}></Complited>
+                }
                 <WritingLotti></WritingLotti>
 
             </div>
