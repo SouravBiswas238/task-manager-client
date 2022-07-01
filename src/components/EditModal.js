@@ -6,16 +6,17 @@ import { useForm } from 'react-hook-form';
 
 
 
-const EditModal = ({ editData, refetch }) => {
+const EditModal = ({ editData, refetch, setShow }) => {
     const { name, email, _id, task } = editData;
     const { register, formState: { errors }, handleSubmit: handleEditSubmit, reset } = useForm();
 
-
-
     const editTask = (editedTask) => {
+
         const id = _id;
+        console.log(editData);
+
         if (editedTask) {
-            fetch(`https://shielded-mesa-63878.herokuapp.com/tasks/${id}`, {
+            fetch(`http://localhost:5000/tasks/${id}`, {
                 method: 'PUT',
                 headers: {
                     'content-type': 'application/json'
@@ -32,9 +33,8 @@ const EditModal = ({ editData, refetch }) => {
         else {
             toast.error("Failed to update")
         }
-
+        setShow(false);
         reset();
-
     }
 
     return (
@@ -44,7 +44,6 @@ const EditModal = ({ editData, refetch }) => {
                 <div class="modal-box w-11/12 max-w-3xl">
                     <h3 class="font-bold text-lg"> Edit your task here</h3>
                     <label for="edit-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-
 
                     <form onSubmit={handleEditSubmit(editTask)} >
                         <div className="form-control lg:w-full">
@@ -62,9 +61,8 @@ const EditModal = ({ editData, refetch }) => {
                             </label>
 
                         </div>
-                        <input className='btn lg:w-1/2 btn-secondary text-white mx-2' type="submit" value='Update' />
 
-                        <label for="edit-modal" class="btn">Done!</label>
+                        <button className='btn lg:w-1/2 btn-secondary text-white mx-2' type="submit">Update</button>
 
 
                     </form>

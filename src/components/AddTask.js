@@ -20,7 +20,7 @@ const AddTask = () => {
         console.log(taskData);
 
         if (taskData) {
-            fetch('https://shielded-mesa-63878.herokuapp.com/task', {
+            fetch('http://localhost:5000/task', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'

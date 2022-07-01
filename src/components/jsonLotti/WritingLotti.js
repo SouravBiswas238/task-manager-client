@@ -15,8 +15,8 @@ const WritingLotti = () => {
     return (
         <div>
             <Lottie options={defaultOptions}
-                height={500}
-                width={500}
+                height={400}
+                width={300}
             />
         </div>
     );

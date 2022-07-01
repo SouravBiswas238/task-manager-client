@@ -15,12 +15,13 @@ import WritingLotti from './jsonLotti/WritingLotti';
 const Todo = () => {
     const [editData, setEditData] = useState({});
     const [checkboxOpen, setCheckboxOpen] = useState({});
-    const a = ["Banana",];
+    const [show, setShow] = useState(true);
+
 
 
     const { register, formState: { errors }, handleSubmit, reset } = useForm();
     const { data, isLoading, error, refetch } = useQuery('repoData', () =>
-        fetch(`https://shielded-mesa-63878.herokuapp.com/tasks`, {
+        fetch(`http://localhost:5000/tasks`, {
             method: 'GET',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -39,7 +40,7 @@ const Todo = () => {
         const taskData = { task, email, name }
 
         if (taskData) {
-            fetch('https://shielded-mesa-63878.herokuapp.com/task', {
+            fetch('http://localhost:5000/task', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -60,7 +61,7 @@ const Todo = () => {
 
     }
     const handelTaskEdit = (id) => {
-        fetch(`https://shielded-mesa-63878.herokuapp.com/tasks/${id}`, {
+        fetch(`http://localhost:5000/tasks/${id}`, {
             method: 'GET',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -70,13 +71,11 @@ const Todo = () => {
             .then(data => {
                 setEditData(data);
             });
+
+        setShow(true)
     }
 
 
-    const status = (event) => {
-        setCheckboxOpen(event);
-
-    }
 
     if (isLoading) {
         return <Loading></Loading>
@@ -104,7 +103,7 @@ const Todo = () => {
                             </thead>
                             <tbody>
                                 {
-                                    data?.map(taskD => <SingleTask key={taskD._id} status={status} handelTaskEdit={handelTaskEdit} taskD={taskD}>
+                                    data?.map(taskD => <SingleTask key={taskD._id} handelTaskEdit={handelTaskEdit} taskD={taskD}>
                                     </SingleTask>
                                     )
                                 }
@@ -133,15 +132,13 @@ const Todo = () => {
                         </form>
                     </div>
                     {
-                        editData && <EditModal editData={editData} refetch={refetch}></EditModal>
+                        show && <EditModal setShow={setShow} editData={editData} refetch={refetch}></EditModal>
 
                     }
 
                 </div>
 
-                {
-                    <Complited checkboxOpen={checkboxOpen}></Complited>
-                }
+
                 <WritingLotti></WritingLotti>
 
             </div>

@@ -10,7 +10,7 @@ const useToken = user => {
         const sUser = { email, name };
 
         if (email) {
-            fetch('https://shielded-mesa-63878.herokuapp.com/user', {
+            fetch('http://localhost:5000/user', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
